@@ -28,8 +28,8 @@ impl Solution {
             if let Some(node) = root {
                 let node = node.borrow();
 
-                let (ll, lr) = helper(&node.left, max);
-                let (rl, rr) = helper(&node.right, max);
+                let (_, lr) = helper(&node.left, max);
+                let (rl, _) = helper(&node.right, max);
 
                 let current = std::cmp::max(lr, rl);
                 *max = std::cmp::max(*max, current);

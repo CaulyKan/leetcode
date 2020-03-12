@@ -20,9 +20,9 @@ fn set_sub_nodes(
 fn test1() {
     let mut root = Some(Rc::from(RefCell::from(TreeNode::new(1))));
     let mut n2 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
-    let mut n3 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
-    let mut n4 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
-    let mut n5 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
+    let n3 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
+    let n4 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
+    let n5 = Some(Rc::from(RefCell::from(TreeNode::new(1))));
     set_sub_nodes(&mut n2, n4, n5);
     set_sub_nodes(&mut root, n2, n3);
 
@@ -32,7 +32,7 @@ fn test1() {
 
 #[test]
 fn test2() {
-    let mut root = Some(Rc::from(RefCell::from(TreeNode::new(1))));
+    let root = Some(Rc::from(RefCell::from(TreeNode::new(1))));
 
     let result = Solution::diameter_of_binary_tree(root);
     assert_eq!(0, result);
