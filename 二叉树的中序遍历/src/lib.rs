@@ -1,6 +1,10 @@
-use std::cell::RefCell;
-use std::rc::Rc;
+/*
+ * @lc app=leetcode.cn id=94 lang=rust
+ *
+ * [94] 二叉树的中序遍历
+ */
 
+pub struct Solution;
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
     pub val: i32,
@@ -19,7 +23,38 @@ impl TreeNode {
     }
 }
 
-// Copy After
+// @lc code=start
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+//
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::cell::RefCell;
+use std::rc::Rc;
+
+impl Solution {
+    pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        let mut v = Vec::new();
+        root.walk_t(TraversalType::Inorder, &mut v, |v, x| match x.get_val() {
+            Some(i) => v.push(i),
+            _ => (),
+        });
+        v
+    }
+}
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum TraversalType {
@@ -224,3 +259,5 @@ impl TreeNode {
         }
     }
 }
+
+// @lc code=end

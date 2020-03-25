@@ -10,12 +10,13 @@ fn test1() {
 #[test]
 fn test2() {
     let result = TreeNode::from_string("1,2,3");
-    TreeNode::walk(&result, |mut x| x.set_val(x.get_val().unwrap() + 1));
+    result.walk(TraversalType::Inorder, |mut x| {
+        x.set_val(x.get_val().unwrap() + 1)
+    });
     assert_eq!(Some(2), result.get_val());
     assert_eq!(Some(3), result.get_left().get_val());
     assert_eq!(Some(4), result.get_right().get_val());
 }
-
 #[test]
 fn test3() {
     let result = TreeNode::from_string("1,null,3,4,5");
@@ -37,10 +38,26 @@ fn test4() {
 #[test]
 fn test5() {
     let result = TreeNode::from_string("1,2,3,4,5");
-    let sum = TreeNode::walk_return(
-        &result,
+    let sum = result.aggregate(
         |n| n.get_val().unwrap_or(0),
         |v, l, r| Some(v + l.unwrap_or(0) + r.unwrap_or(0)),
     );
     assert_eq!(Some(1 + 2 + 3 + 4 + 5), sum);
+}
+
+#[test]
+fn test6() {
+    let result = TreeNode::from_string("1,2,3");
+    let mut v = Vec::new();
+    result.walk_t(TraversalType::Inorder, &mut v, |v, x| match x.get_val() {
+        Some(i) => v.push(i),
+        _ => (),
+    });
+    assert_eq!(vec![2, 1, 3], v);
+}
+
+#[test]
+fn test7() {
+    let result = TreeNode::from_string("1,null,2,3");
+    assert_eq!(Some(3), result.get_right().get_left().get_val());
 }
