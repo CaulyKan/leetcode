@@ -61,3 +61,19 @@ fn test7() {
     let result = TreeNode::from_string("1,null,2,3");
     assert_eq!(Some(3), result.get_right().get_left().get_val());
 }
+
+#[test]
+fn test8() {
+    let result = TreeNode::from_string("1,null,2,3");
+    let mut count = 0;
+    let sum = result.aggregate_t(
+        &mut count,
+        |_, node| node.get_val().unwrap_or(0),
+        |count, val, lval, rval| {
+            *count += 1;
+            Some(val + lval.unwrap_or(0) + rval.unwrap_or(0))
+        },
+    );
+    assert_eq!(3, count);
+    assert_eq!(Some(6), sum);
+}

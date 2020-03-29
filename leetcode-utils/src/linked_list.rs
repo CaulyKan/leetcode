@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+// #region LeetCode TreeNode
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
     pub val: i32,
@@ -18,8 +19,9 @@ impl TreeNode {
         }
     }
 }
+// endregion
 
-// Copy After
+// #region Tree ext
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum TraversalType {
@@ -49,6 +51,12 @@ pub trait RefTreeNode {
         &self,
         val_func: fn(Option<Rc<RefCell<TreeNode>>>) -> T,
         aggr_func: fn(T, Option<T>, Option<T>) -> Option<T>,
+    ) -> Option<T>;
+    fn aggregate_t<R, T>(
+        &self,
+        result: &mut R,
+        val_func: fn(&mut R, Option<Rc<RefCell<TreeNode>>>) -> T,
+        aggr_func: fn(&mut R, T, Option<T>, Option<T>) -> Option<T>,
     ) -> Option<T>;
 }
 
@@ -178,6 +186,28 @@ impl RefTreeNode for Option<Rc<RefCell<TreeNode>>> {
             None
         }
     }
+    fn aggregate_t<R, T>(
+        &self,
+        result: &mut R,
+        val_func: fn(&mut R, Option<Rc<RefCell<TreeNode>>>) -> T,
+        aggr_func: fn(&mut R, T, Option<T>, Option<T>) -> Option<T>,
+    ) -> Option<T> {
+        if let Some(node) = self {
+            let n = node.borrow();
+            let mut lval = None;
+            let mut rval = None;
+            if let Some(left) = &n.left {
+                lval = Some(Rc::clone(left)).aggregate_t(result, val_func, aggr_func);
+            }
+            if let Some(right) = &n.right {
+                rval = Some(Rc::clone(right)).aggregate_t(result, val_func, aggr_func);
+            }
+            let val = val_func(result, Some(Rc::clone(&node)));
+            aggr_func(result, val, lval, rval)
+        } else {
+            None
+        }
+    }
 }
 
 impl TreeNode {
@@ -224,3 +254,4 @@ impl TreeNode {
         }
     }
 }
+// #endregion
