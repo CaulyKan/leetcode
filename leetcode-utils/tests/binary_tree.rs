@@ -1,5 +1,5 @@
 extern crate leetcode_utils;
-use leetcode_utils::linked_list::*;
+use leetcode_utils::binary_tree::*;
 
 #[test]
 fn test1() {
