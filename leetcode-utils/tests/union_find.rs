@@ -58,3 +58,10 @@ fn test4() {
     assert_eq!(Some(3), uf.union_size("b"));
     assert_eq!(Some(3), uf.union_size("c"));
 }
+
+#[test]
+fn test5() {
+    let list = vec![(0, 0, 0), (0, 1, 1), (2, 1, 1)];
+    let mut uf = UnionFind::from_iter(list);
+    assert!(uf.union((0, 0, 0), (0, 1, 1)).is_ok());
+}
